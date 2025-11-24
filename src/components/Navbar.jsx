@@ -67,6 +67,16 @@ const Navbar = () => {
           Contact Us
         </Link>
       </li>
+      <li>
+        <Link
+          href="/add-course"
+          className={
+            pathname === "/add-course" ? "text-secondary font-bold" : ""
+          }
+        >
+          Add Course
+        </Link>
+      </li>
     </>
   );
 
