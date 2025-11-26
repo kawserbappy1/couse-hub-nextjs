@@ -1,8 +1,30 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function CourseCard({ course }) {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleEnrollClick = (e) => {
+    if (!session) {
+      e.preventDefault(); // Prevent default link behavior
+      // Redirect to login page
+
+      const currentPath = window.location.pathname;
+      const redirectUrl = `${currentPath}?course=${course._id}`;
+
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(redirectUrl)}`);
+      return;
+    }
+
+    // If user is logged in, proceed with enrollment
+    // Add your enrollment logic here
+    console.log("Enrolling in course:", course._id);
+  };
   if (!course) return null;
 
   const renderStars = (rating) => {
@@ -90,6 +112,7 @@ export default function CourseCard({ course }) {
         {/* Action Buttons */}
         <div className="card-actions justify-between items-center">
           <Link
+            onClick={handleEnrollClick}
             href={`/courses/${course._id}`}
             className="btn btn-primary btn-sm flex-1 group-hover:btn-secondary transition-all"
           >
