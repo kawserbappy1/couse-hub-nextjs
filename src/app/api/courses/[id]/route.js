@@ -1,29 +1,35 @@
+import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 
-export async function GET(req, { params }) {
-  const resolvedParams = await params; // unwrap the promise
-  const { id } = resolvedParams;
-
+export async function GET(request, { params }) {
   try {
+    const { id } = params;
+
+    console.log("Fetching course with ID:", id);
+
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json({ error: "Invalid course ID" }, { status: 400 });
+    }
+
     const client = await clientPromise;
-    const db = client.db("course-hub");
+    const db = client.db("coursehub");
 
     const course = await db
       .collection("courses")
       .findOne({ _id: new ObjectId(id) });
 
     if (!course) {
-      return new Response(JSON.stringify({ message: "Course not found" }), {
-        status: 404,
-      });
+      return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
-    course._id = course._id.toString();
-
-    return new Response(JSON.stringify(course), { status: 200 });
-  } catch (err) {
-    console.log(err);
-    return new Response("Failed to fetch course", { status: 500 });
+    console.log("Course found:", course.title);
+    return NextResponse.json(course);
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch course" },
+      { status: 500 }
+    );
   }
 }

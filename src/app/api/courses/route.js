@@ -1,26 +1,48 @@
+import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
 export async function GET() {
   try {
+    console.log("Fetching courses from MongoDB...");
+
     const client = await clientPromise;
     const db = client.db("course-hub");
-    const courses = await db.collection("courses").find({}).toArray();
-    return new Response(JSON.stringify(courses), { status: 200 });
-  } catch (err) {
-    return new Response("Failed to fetch courses", { status: 500 });
+
+    const courses = await db
+      .collection("courses")
+      .find({})
+      .sort({ _id: -1 })
+      .toArray();
+
+    console.log(`Found ${courses.length} courses`);
+
+    return NextResponse.json(courses);
+  } catch (error) {
+    console.error("MongoDB Error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch courses", details: error.message },
+      { status: 500 }
+    );
   }
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
     const client = await clientPromise;
     const db = client.db("course-hub");
-    const data = await req.json();
-    await db.collection("courses").insertOne(data);
-    return new Response(JSON.stringify({ message: "Course added!" }), {
-      status: 201,
+    const courseData = await request.json();
+
+    const result = await db.collection("courses").insertOne({
+      ...courseData,
+      createdAt: new Date(),
     });
-  } catch (err) {
-    return new Response("Failed to add course", { status: 500 });
+
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("Error creating course:", error);
+    return NextResponse.json(
+      { error: "Failed to create course" },
+      { status: 500 }
+    );
   }
 }
