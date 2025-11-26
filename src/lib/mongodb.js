@@ -1,8 +1,8 @@
 import { MongoClient } from "mongodb";
 
-const uri =
-  process.env.MONGODB_URI ||
-  `mongodb+srv://${process.env.DB_User}:${process.env.DB_pass}@cluster0.rmpdbzj.mongodb.net/coursehub?retryWrites=true&w=majority`;
+const uri = process.env.MONGODB_URI;
+// process.env.MONGODB_URI ||
+// `mongodb+srv://${process.env.DB_User}:${process.env.DB_pass}@cluster0.rmpdbzj.mongodb.net/coursehub?retryWrites=true&w=majority`;
 
 let client;
 let clientPromise;
