@@ -222,7 +222,7 @@ function LoginForm() {
             <p className="text-base-content/70">
               Don't have an account?
               <Link
-                href="/auth/signup"
+                href="/auth/signin"
                 className="text-primary hover:text-secondary font-semibold ml-2 transition-colors"
               >
                 Sign up
