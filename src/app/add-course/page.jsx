@@ -46,7 +46,6 @@ const AddCourse = () => {
         const result = await res.json();
         console.log("Course created successfully:", result);
 
-        // Show success SweetAlert
         Swal.fire({
           title: "Success!",
           text: "Course created successfully!",
@@ -56,12 +55,10 @@ const AddCourse = () => {
           timer: 3000,
           timerProgressBar: true,
           didClose: () => {
-            // Redirect to courses page after alert is closed
             router.push("/courses");
           },
         });
 
-        // Reset form
         setFormData({
           title: "",
           description: "",
@@ -77,8 +74,6 @@ const AddCourse = () => {
           instructorName: "",
           instructorRole: "",
         });
-
-        // Alternative: Auto-redirect after 3 seconds even if user doesn't close the alert
         setTimeout(() => {
           router.push("/courses");
         }, 3000);
@@ -88,8 +83,6 @@ const AddCourse = () => {
       }
     } catch (error) {
       console.error("Error creating course:", error);
-
-      // Show error SweetAlert
       Swal.fire({
         title: "Error!",
         text: error.message || "Error creating course. Please try again.",
@@ -102,7 +95,6 @@ const AddCourse = () => {
     }
   };
 
-  // Alternative submit handler with custom SweetAlert styling
   const handleSubmitWithCustomAlert = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -117,7 +109,6 @@ const AddCourse = () => {
       if (res.ok) {
         const result = await res.json();
 
-        // Custom styled success alert
         Swal.fire({
           title: "🎉 Course Created!",
           text: "Your course has been successfully added to the platform.",
@@ -137,10 +128,8 @@ const AddCourse = () => {
           buttonsStyling: false,
         }).then((result) => {
           if (result.isConfirmed) {
-            // Redirect to courses page
             router.push("/courses");
           } else if (result.dismiss === Swal.DismissReason.cancel) {
-            // Reset form for adding another course
             setFormData({
               title: "",
               description: "",
@@ -200,7 +189,6 @@ const AddCourse = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-100 to-base-200 py-8">
       <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Add New Course
@@ -210,10 +198,8 @@ const AddCourse = () => {
           </p>
         </div>
 
-        {/* Use handleSubmitWithCustomAlert for the custom styled version */}
         <form onSubmit={handleSubmit}>
           <div className="bg-base-100 rounded-3xl shadow-2xl p-8 border border-base-300">
-            {/* Course Thumbnail Section */}
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Course Thumbnail
@@ -237,7 +223,6 @@ const AddCourse = () => {
               </div>
             </div>
 
-            {/* Course Details Form */}
             <div className="space-y-6">
               {/* Title */}
               <div className="form-control">
@@ -257,7 +242,6 @@ const AddCourse = () => {
                 />
               </div>
 
-              {/* Description */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-semibold text-lg">
@@ -275,9 +259,7 @@ const AddCourse = () => {
                 ></textarea>
               </div>
 
-              {/* Course Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Total Lessons */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-semibold">
@@ -294,7 +276,6 @@ const AddCourse = () => {
                   />
                 </div>
 
-                {/* Duration */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-semibold">Duration</span>
@@ -314,7 +295,6 @@ const AddCourse = () => {
                   </select>
                 </div>
 
-                {/* Price */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-semibold">
@@ -333,7 +313,6 @@ const AddCourse = () => {
                   />
                 </div>
 
-                {/* Rating */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-semibold">Rating</span>
@@ -352,9 +331,7 @@ const AddCourse = () => {
                 </div>
               </div>
 
-              {/* Additional Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Enrolled Students */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-semibold">
@@ -371,7 +348,6 @@ const AddCourse = () => {
                   />
                 </div>
 
-                {/* Certificate */}
                 <div className="form-control">
                   <label className="label cursor-pointer justify-start gap-4">
                     <input
@@ -388,7 +364,6 @@ const AddCourse = () => {
                 </div>
               </div>
 
-              {/* Course Category */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-semibold text-lg">
@@ -410,7 +385,6 @@ const AddCourse = () => {
                 </select>
               </div>
 
-              {/* Course Level */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-semibold text-lg">
@@ -432,7 +406,6 @@ const AddCourse = () => {
                 </select>
               </div>
 
-              {/* Instructor Section */}
               <div className="bg-base-200 rounded-2xl p-6">
                 <h3 className="text-xl font-bold text-primary mb-4">
                   Instructor Information
@@ -471,7 +444,6 @@ const AddCourse = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-base-300">
                 <button
                   type="submit"
@@ -518,7 +490,6 @@ const AddCourse = () => {
           </div>
         </form>
 
-        {/* Preview Card */}
         <div className="mt-8">
           <h3 className="text-2xl font-bold text-primary mb-4 text-center">
             Course Preview
@@ -538,7 +509,6 @@ const AddCourse = () => {
                 )}
               </div>
 
-              {/* Preview Details */}
               <div className="space-y-4">
                 <h4 className="text-xl font-bold text-base-content">
                   {formData.title || "Course Title Preview"}

@@ -7,16 +7,36 @@ export default function CourseDetails() {
   const params = useParams();
   const { id } = params;
   const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
-    fetch(`/api/courses/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCourse(data))
-      .catch((err) => console.log(err));
+    const fetchCourse = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/courses/${id}`);
+        const data = await res.json();
+
+        if (res.ok) {
+          setCourse(data);
+        } else {
+          console.error("Error fetching course:", data.error);
+          // Handle error state if needed
+        }
+      } catch (error) {
+        console.error("Error fetching course:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchCourse();
+    }
   }, [id]);
 
-  if (!course) {
+  // Show loading state
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -27,7 +47,34 @@ export default function CourseDetails() {
     );
   }
 
-  // Sample curriculum data - you can replace this with actual data from your API
+  // Show error state if course not found
+  if (!course) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">😞</div>
+          <h2 className="text-2xl font-bold text-error mb-2">
+            Course Not Found
+          </h2>
+          <p className="text-base-content/70">
+            The course you're looking for doesn't exist.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Safe data access with fallbacks
+  const enrollStudent = course.enrollStudent || 0;
+  const review = course.review || 0;
+  const duration = course.duration || "Not specified";
+  const totalLesson = course.totalLesson || 0;
+  const price = course.price || 0;
+  const thumbnail = course.thumbnail || "/default-course-image.jpg";
+  const description = course.description || "No description available.";
+  const title = course.title || "Untitled Course";
+
+  // Sample curriculum data
   const curriculum = [
     {
       week: 1,
@@ -104,22 +151,20 @@ export default function CourseDetails() {
       <div className="bg-gradient-to-r from-primary to-secondary text-primary-content">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {course.title}
-            </h1>
-            <p className="text-xl opacity-90 mb-8">{course.description}</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{title}</h1>
+            <p className="text-xl opacity-90 mb-8">{description}</p>
             <div className="flex flex-wrap justify-center gap-6 text-sm md:text-base">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">👥</span>
-                <span>{course.enrollStudent.toLocaleString()}+ Students</span>
+                <span>{enrollStudent.toLocaleString()}+ Students</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-2xl">⭐</span>
-                <span>{course.review}/5 Rating</span>
+                <span>{review}/5 Rating</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-2xl">📅</span>
-                <span>{course.duration}</span>
+                <span>{duration}</span>
               </div>
               {course.certificate && (
                 <div className="flex items-center gap-2">
@@ -139,11 +184,14 @@ export default function CourseDetails() {
             {/* Course Image */}
             <div className="rounded-3xl overflow-hidden shadow-2xl mb-8">
               <Image
-                src={course.thumbnail}
-                alt={course.title}
+                src={thumbnail}
+                alt={title}
                 width={1200}
                 height={600}
                 className="w-full h-64 md:h-80 object-cover"
+                onError={(e) => {
+                  e.target.src = "/default-course-image.jpg";
+                }}
               />
             </div>
 
@@ -183,11 +231,7 @@ export default function CourseDetails() {
                     Course Overview
                   </h3>
                   <p className="text-base-content/80 leading-relaxed">
-                    This comprehensive MERN stack course will take you from
-                    beginner to job-ready full-stack developer. You'll build
-                    real-world projects, learn industry best practices, and
-                    master the most in-demand technologies in web development
-                    today.
+                    {description}
                   </p>
 
                   <div className="grid md:grid-cols-2 gap-6 mt-6">
@@ -295,7 +339,7 @@ export default function CourseDetails() {
               <div className="bg-base-100 rounded-3xl shadow-2xl p-6 border-2 border-primary/20">
                 <div className="text-center mb-6">
                   <div className="text-4xl font-bold text-primary mb-2">
-                    ${course.price}
+                    ${price}
                   </div>
                   <div className="text-base-content/70">One-time payment</div>
                 </div>
@@ -315,7 +359,7 @@ export default function CourseDetails() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-success">✓</span>
-                    <span>{course.totalLesson} lessons</span>
+                    <span>{totalLesson} lessons</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-success">✓</span>
@@ -367,22 +411,22 @@ export default function CourseDetails() {
                       Students enrolled:
                     </span>
                     <span className="font-bold">
-                      {course.enrollStudent.toLocaleString()}
+                      {enrollStudent.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-base-content/70">Rating:</span>
                     <span className="font-bold flex items-center gap-1">
-                      {course.review}/5 ⭐
+                      {review}/5 ⭐
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-base-content/70">Duration:</span>
-                    <span className="font-bold">{course.duration}</span>
+                    <span className="font-bold">{duration}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-base-content/70">Lessons:</span>
-                    <span className="font-bold">{course.totalLesson}</span>
+                    <span className="font-bold">{totalLesson}</span>
                   </div>
                 </div>
               </div>

@@ -1,22 +1,24 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 const PrivateRoute = ({ children }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (status === "loading") return; // Still loading
+    if (status === "loading") return;
 
     if (!session) {
-      // Redirect to login page if not authenticated
-      router.push("/auth/login");
+      // Get the current path for redirect after login
+      const currentPath = window.location.pathname;
+      // Redirect to your existing login page with callbackUrl
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(currentPath)}`);
     }
   }, [session, status, router]);
 
-  // Show loading while checking authentication
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -28,12 +30,10 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  // If user is authenticated, show the children (protected content)
   if (session) {
     return <>{children}</>;
   }
 
-  // If not authenticated, show nothing (will redirect)
   return null;
 };
 

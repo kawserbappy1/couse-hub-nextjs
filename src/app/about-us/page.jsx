@@ -43,7 +43,6 @@ const AboutUs = () => {
   return (
     <section className="py-20 bg-gradient-to-br from-base-100 to-base-200">
       <div className="container mx-auto px-4">
-        {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             About LearnHub
@@ -55,7 +54,6 @@ const AboutUs = () => {
           </p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
           {stats.map((stat, index) => (
             <div
@@ -72,7 +70,6 @@ const AboutUs = () => {
           ))}
         </div>
 
-        {/* Mission & Vision */}
         <div className="grid md:grid-cols-2 gap-12 mb-20">
           <div className="bg-base-100 p-8 rounded-3xl shadow-xl border border-primary/20">
             <div className="text-4xl mb-4">🎯</div>
@@ -99,7 +96,6 @@ const AboutUs = () => {
           </div>
         </div>
 
-        {/* Team Section */}
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">

@@ -1,10 +1,8 @@
-// app/api/auth/[...nextauth]/route.js
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 
-// In-memory users (replace with MongoDB/Prisma later)
 let users = [];
 
 const handler = NextAuth({
@@ -31,7 +29,6 @@ const handler = NextAuth({
         try {
           const { name, photoURL, action } = credentials;
 
-          // SIGN UP LOGIC - only when action is explicitly "signup"
           if (action === "signup") {
             console.log("Signup attempt for:", credentials.email);
 
@@ -40,7 +37,6 @@ const handler = NextAuth({
               return null;
             }
 
-            // Check if user already exists
             const existingUser = users.find(
               (u) => u.email === credentials.email
             );
@@ -49,10 +45,8 @@ const handler = NextAuth({
               throw new Error("User already exists");
             }
 
-            // Hash password
             const hashedPassword = await bcrypt.hash(credentials.password, 10);
 
-            // Create new user
             const newUser = {
               id: Date.now().toString(),
               name,
@@ -68,7 +62,6 @@ const handler = NextAuth({
             users.push(newUser);
             console.log("New user created:", newUser.email);
 
-            // Return user (without password)
             return {
               id: newUser.id,
               name: newUser.name,
@@ -77,7 +70,6 @@ const handler = NextAuth({
             };
           }
 
-          // LOGIN LOGIC - this runs when no action or action is not "signup"
           console.log("Login attempt for:", credentials.email);
           const user = users.find((u) => u.email === credentials.email);
 
@@ -112,13 +104,9 @@ const handler = NextAuth({
     }),
   ],
 
-  // ... rest of your callbacks and configuration
-  // Ensure this is set for production
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },

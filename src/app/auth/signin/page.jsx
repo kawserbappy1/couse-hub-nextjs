@@ -14,11 +14,10 @@ const SignUpForm = () => {
     agreeToTerms: false,
   });
 
-  // Check if user is already authenticated
   useEffect(() => {
     getSession().then((session) => {
       if (session) {
-        router.push("/dashboard"); // Redirect if already logged in
+        router.push("/dashboard");
       }
     });
   }, [router]);
@@ -40,8 +39,8 @@ const SignUpForm = () => {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        photoURL: formData.photo, // Add this
-        action: "signup", // Add this to indicate it's a signup
+        photoURL: formData.photo,
+        action: "signup",
         redirect: false,
       });
 
@@ -69,7 +68,6 @@ const SignUpForm = () => {
       if (result?.error) {
         alert("Google sign in failed. Please try again.");
       }
-      // If successful, the redirect will happen automatically
     } catch (error) {
       console.error("Google sign in error:", error);
       alert("An error occurred during Google sign in.");
@@ -81,9 +79,7 @@ const SignUpForm = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        {/* Card Container */}
         <div className="bg-base-100 rounded-3xl shadow-2xl p-8 border border-base-300">
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl text-white">👤</span>
@@ -96,9 +92,7 @@ const SignUpForm = () => {
             </p>
           </div>
 
-          {/* Form */}
           <form className="space-y-6" onSubmit={handleCredentialsSignUp}>
-            {/* Name Field */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-semibold">Full Name</span>
@@ -118,7 +112,6 @@ const SignUpForm = () => {
               </div>
             </div>
 
-            {/* Email Field */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-semibold">Email Address</span>
@@ -139,7 +132,6 @@ const SignUpForm = () => {
               </div>
             </div>
 
-            {/* Photo URL Field */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-semibold">
@@ -166,7 +158,6 @@ const SignUpForm = () => {
               </label>
             </div>
 
-            {/* Password Field */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-semibold">Password</span>
@@ -192,7 +183,6 @@ const SignUpForm = () => {
               </label>
             </div>
 
-            {/* Terms and Conditions */}
             <div className="form-control">
               <label className="label cursor-pointer justify-start gap-3">
                 <input
@@ -215,7 +205,6 @@ const SignUpForm = () => {
               </label>
             </div>
 
-            {/* Register Button */}
             <button
               type="submit"
               disabled={isLoading || !formData.agreeToTerms}
@@ -235,10 +224,8 @@ const SignUpForm = () => {
             </button>
           </form>
 
-          {/* Divider */}
           <div className="divider my-8">OR</div>
 
-          {/* Google Sign Up Button */}
           <button
             onClick={handleGoogleSignUp}
             disabled={isLoading}
@@ -274,7 +261,6 @@ const SignUpForm = () => {
             )}
           </button>
 
-          {/* Login Link */}
           <div className="text-center mt-8">
             <p className="text-base-content/70">
               Already have an account?{" "}
@@ -288,7 +274,6 @@ const SignUpForm = () => {
           </div>
         </div>
 
-        {/* Feature Highlights */}
         <div className="grid grid-cols-3 gap-4 mt-8 text-center">
           {[
             { icon: "⚡", text: "Fast" },

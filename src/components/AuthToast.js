@@ -1,4 +1,3 @@
-// src/components/AuthToast.js
 "use client";
 
 import { useSession } from "next-auth/react";
@@ -10,7 +9,6 @@ export default function AuthToast() {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      // Only show toast once when they first log in
       const hasShown = sessionStorage.getItem("loginToastShown");
 
       if (!hasShown) {
@@ -26,11 +24,11 @@ export default function AuthToast() {
       }
     }
 
-    // Reset when they log out
     if (status === "unauthenticated") {
       sessionStorage.removeItem("loginToastShown");
     }
   }, [status, session]);
 
-  return null; // This component renders nothing
+  return null;
+  g;
 }

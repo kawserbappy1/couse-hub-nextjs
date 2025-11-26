@@ -98,7 +98,6 @@ const Navbar = () => {
     </>
   );
 
-  // Show loading state while checking session
   if (status === "loading") {
     return (
       <div className="container mx-auto navbar bg-base-100 shadow-sm">

@@ -4,17 +4,16 @@ import { ObjectId } from "mongodb";
 
 export async function GET(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     console.log("Fetching course with ID:", id);
 
-    if (!ObjectId.isValid(id)) {
+    if (!id || !ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid course ID" }, { status: 400 });
     }
 
     const client = await clientPromise;
-    const db = client.db("coursehub");
-
+    const db = client.db("course-hub");
     const course = await db
       .collection("courses")
       .findOne({ _id: new ObjectId(id) });
@@ -28,7 +27,7 @@ export async function GET(request, { params }) {
   } catch (error) {
     console.error("Error fetching course:", error);
     return NextResponse.json(
-      { error: "Failed to fetch course" },
+      { error: "Failed to fetch course", details: error.message },
       { status: 500 }
     );
   }
