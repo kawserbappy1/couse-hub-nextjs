@@ -1,6 +1,6 @@
 # 📚 Course Hub - Online Learning Platform
 
-![Project Image](https://./project-image.png)
+![Project Image](images/fullimage.png)
 
 Transform your skills with expert-led courses - A modern, interactive platform for learners and instructors.
 
@@ -48,7 +48,8 @@ Course Hub is a full-stack online course marketplace built with modern web techn
 ---
 
 ## 🎯 Screenshots
-![Project Image](https://./project-image.png)  
+![Project Image](images/scren1.png)  
+![Project Image](images/scren2.png)  
 Modern and intuitive user interface.
 
 ---
